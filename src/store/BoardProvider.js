@@ -94,21 +94,18 @@ const boardReducer = (state, action) => {
       newElements = newElements.filter((element) => {
         return !isPointNearElement(element, clientX, clientY);
       });
-      const newHistory = state.history.slice(0, state.index + 1);
-      newHistory.push(newElements);
       return {
         ...state,
         elements: newElements,
-        history: newHistory,
-        index: state.index + 1,
       };
     }
     default:
-      throw new Error("Type not recognized");
+      return state;
+    // throw new Error("Type not recognized");
   }
 };
 const initialBoardState = {
-  activeToolItem: TOOL_ITEMS.LINE,
+  activeToolItem: TOOL_ITEMS.BRUSH,
   toolActionType: TOOL_ACTION_TYPES.NONE,
   elements: [],
 };
@@ -149,7 +146,7 @@ const BoardProvider = ({ children }) => {
 
   const boardMouseMoveHandler = (event) => {
     const { clientX, clientY } = event;
-    if (boardState.TOOL_ACTION_TYPES === TOOL_ACTION_TYPES.DRAWING) {
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.DRAW_MOVE,
         payload: {
@@ -157,7 +154,7 @@ const BoardProvider = ({ children }) => {
           clientY,
         },
       });
-    } else if (boardState.TOOL_ACTION_TYPES === TOOL_ACTION_TYPES.ERASING) {
+    } else if (boardState.toolActionType === TOOL_ACTION_TYPES.ERASING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.ERASE,
         payload: {
@@ -173,7 +170,7 @@ const BoardProvider = ({ children }) => {
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
         actionType: TOOL_ACTION_TYPES.NONE,
-      }
+      },
     });
   };
 
