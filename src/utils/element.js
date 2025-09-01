@@ -116,7 +116,7 @@ export const isPointNearElement = (element, pointX, pointY) => {
       context.fillStyle = element.stroke;
       const textWidth = context.measureText(element.text).width;
       const textHeight = parseInt(element.size);
-      //context.restore();
+      context.restore();
       return (
         isPointCloseToLine(x1, y1, x1 + textWidth, y1, pointX, pointY) ||
         isPointCloseToLine(
