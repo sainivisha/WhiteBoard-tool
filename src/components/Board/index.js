@@ -16,6 +16,8 @@ function Board() {
     boardMouseMoveHandler,
     boardMouseUpHandler,
     textAreaBlurHandler,
+    undo,
+    redo,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
 
@@ -25,6 +27,20 @@ function Board() {
     canvas.height = window.innerHeight;
     // const context = canvas.getContext("2d");
   }, []);
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.ctrlKey && event.key === "z") {
+        undo();
+      } else if (event.ctrlKey && event.key === "v") {
+        redo();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [undo, redo]);
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
