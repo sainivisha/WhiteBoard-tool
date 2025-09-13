@@ -17,7 +17,6 @@ const Toolbox = () => {
   const { activeToolItem } = useContext(boardContext);
   const { toolboxState, changeStroke, changeFill, changeSize } =
     useContext(toolboxContext);
-
   const strokeColor = toolboxState[activeToolItem]?.stroke;
   const fillColor = toolboxState[activeToolItem]?.fill;
   const size = toolboxState[activeToolItem]?.size;

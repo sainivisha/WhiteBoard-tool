@@ -19,6 +19,20 @@ function toolboxReducer(state, action) {
       newState[action.payload.tool].size = action.payload.size;
       return newState;
     }
+    case TOOLBOX_ACTIONS.CHANGE_FILL_COLOR: {
+      const newState = { ...state };
+      Object.keys(newState).forEach((tool) => {
+        if (newState[tool].stroke !== undefined) {
+          newState[tool].stroke = action.payload.color;
+        }
+      });
+      return newState;
+    }
+    case TOOLBOX_ACTIONS.CHANGE_TEXT_COLOR: {
+      const newState = { ...state };
+      newState["TEXT"].stroke = action.payload.color;
+      return newState;
+    }
     default:
       return state;
   }
@@ -91,11 +105,27 @@ const ToolboxProvider = ({ children }) => {
     });
   };
 
+  const changeBoxColorHandler = (color) => {
+    dispatchToolboxAction({
+      type: TOOLBOX_ACTIONS.CHANGE_FILL_COLOR,
+      payload: {
+        color,
+      },
+    });
+    dispatchToolboxAction({
+      type: TOOLBOX_ACTIONS.CHANGE_TEXT_COLOR,
+      payload: {
+        color,
+      },
+    });
+  };
+
   const toolboxContextValue = {
     toolboxState,
     changeStroke: changeStrokeHandler,
     changeFill: changeFillHandler,
     changeSize: changeSizeHandler,
+    changeBoxColor: changeBoxColorHandler,
   };
   return (
     <ToolboxContext.Provider value={toolboxContextValue}>

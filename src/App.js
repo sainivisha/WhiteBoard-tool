@@ -1,33 +1,35 @@
-// src/App.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Board from "./components/Board";
 import Toolbar from "./components/Toolbar";
 import Toolbox from "./components/Toolbox";
-import BoardProvider from "./store/BoardProvider";
-import ToolboxProvider from "./store/toolboxProvider";
+import toolboxContext from "./store/toolbox-context";
+import boardContext from "./store/board-context";
 
 function App() {
-  const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("theme") === "dark"
-  );
+  const [darkMode, setDarkMode] = useState();
+  const { changeBoxColor } = useContext(toolboxContext);
+  const { themeColor, changeThemeColor } = useContext(boardContext);
 
+  const handleChangeTheme = (isTheme) => {
+    setDarkMode(isTheme);
+    // Use the new theme value to determine the color
+    isTheme ? changeBoxColor("#FFFFFF") : changeBoxColor("#000000");
+    isTheme ? changeThemeColor("#FFFFFF") : changeThemeColor("#000000");
+  };
   useEffect(() => {
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
+    setDarkMode(themeColor);
+  }, [themeColor]);
   return (
     <div className={darkMode ? "dark" : "light"}>
-      <button onClick={() => setDarkMode(!darkMode)} className="theme-toggle">
+      <button
+        onClick={() => handleChangeTheme(!darkMode)}
+        className="theme-toggle"
+      >
         {darkMode ? "Light Mode" : "Dark Mode"}
       </button>
-
-      <BoardProvider isDarkMode={darkMode}>
-        <ToolboxProvider>
-          <Toolbar darkMode={darkMode} />
-          <Board darkMode={darkMode} />
-          <Toolbox />
-        </ToolboxProvider>
-      </BoardProvider>
+      <Toolbar darkMode={darkMode} />
+      <Board darkMode={darkMode} />
+      <Toolbox />
     </div>
   );
 }

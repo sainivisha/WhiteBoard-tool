@@ -20,6 +20,9 @@ function Board({ darkMode }) {
     redo,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
+
+  console.log(elements);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;

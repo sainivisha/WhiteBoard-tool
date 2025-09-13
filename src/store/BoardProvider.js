@@ -137,6 +137,20 @@ const boardReducer = (state, action) => {
         index: state.index + 1,
       };
     }
+    case BOARD_ACTIONS.CHANGE_THEME_COLOR: {
+      console.log(action.payload.color);
+      let newElements = [...state.elements];
+      newElements = newElements.map((element) => {
+        return { ...element, stroke: action.payload.color };
+      });
+
+      console.log(newElements);
+      return {
+        ...state,
+        elements: newElements,
+        themeColor: action.payload.color,
+      };
+    }
     default:
       return state;
     //throw new Error("Type not recognized");
@@ -148,6 +162,7 @@ const initialBoardState = {
   elements: [],
   history: [[]],
   index: 0,
+  themeColor: "dark",
 };
 
 const BoardProvider = ({ children }) => {
@@ -207,7 +222,7 @@ const BoardProvider = ({ children }) => {
         type: BOARD_ACTIONS.ERASE,
         payload: {
           clientX: x,
-          clientY:y,
+          clientY: y,
         },
       });
     }
@@ -247,6 +262,16 @@ const BoardProvider = ({ children }) => {
     });
   }, []);
 
+  const changeThemeColor = (color) => {
+    console.log(color);
+    dispatchBoardAction({
+      type: BOARD_ACTIONS.CHANGE_THEME_COLOR,
+      payload: {
+        color,
+      },
+    });
+  };
+
   const boardContextValue = {
     activeToolItem: boardState.activeToolItem,
     elements: boardState.elements,
@@ -256,6 +281,7 @@ const BoardProvider = ({ children }) => {
     boardMouseMoveHandler,
     boardMouseUpHandler,
     textAreaBlurHandler,
+    changeThemeColor,
     undo: boardUndoHandler,
     redo: boardRedoHandler,
   };

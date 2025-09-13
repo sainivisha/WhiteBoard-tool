@@ -25,6 +25,7 @@ export const BOARD_ACTIONS = {
   CHANGE_TEXT: "CHANGE_TEXT",
   UNDO: "UNDO",
   REDO: "REDO",
+  CHANGE_THEME_COLOR: "CHANGE_THEME_COLOR",
 };
 
 export const COLORS = {
