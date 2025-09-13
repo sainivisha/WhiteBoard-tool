@@ -16,7 +16,7 @@ import { LuRectangleHorizontal } from "react-icons/lu";
 import { TOOL_ITEMS } from "../../constants";
 import boardContext from "../../store/board-context";
 
-const Toolbar = () => {
+const Toolbar = ({ darkMode }) => {
   const { activeToolItem, changeToolHandler, undo, redo } =
     useContext(boardContext);
 
@@ -29,7 +29,7 @@ const Toolbar = () => {
     anchor.click();
   };
   return (
-    <div className={classes.container}>
+    <div className={cx(classes.container, { [classes.dark]: darkMode })}>
       <div
         className={cx(classes.toolItem, {
           [classes.active]: activeToolItem === TOOL_ITEMS.BRUSH,

@@ -6,7 +6,7 @@ import toolboxContext from "../../store/toolbox-context";
 
 import classes from "./index.module.css";
 
-function Board() {
+function Board({ darkMode }) {
   const canvasRef = useRef();
   const textAreaRef = useRef();
   const {
@@ -20,13 +20,22 @@ function Board() {
     redo,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = darkMode ? "#1e1e1e" : "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }, [darkMode]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     // const context = canvas.getContext("2d");
-  }, []);
+  }, [darkMode]);
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -62,7 +71,7 @@ function Board() {
           context.restore();
           break;
         case TOOL_ITEMS.TEXT:
-          context.textBaseLine = "top";
+          context.textBaseline = "top";
           context.font = `${element.size}px Caveat`;
           context.fillStyle = element.stroke;
           context.fillText(element.text, element.x1, element.y1);
@@ -112,9 +121,7 @@ function Board() {
             fontSize: `${elements[elements.length - 1]?.size}px`,
             color: elements[elements.length - 1]?.stroke,
           }}
-          onBlur={(event) =>
-            textAreaBlurHandler(event.target.value, toolboxState)
-          }
+          onBlur={(event) => textAreaBlurHandler(event.target.value)}
         />
       )}
       <canvas

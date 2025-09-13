@@ -162,7 +162,10 @@ const BoardProvider = ({ children }) => {
 
   const boardMouseDownHandler = (event, toolboxState) => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
-    const { clientX, clientY } = event;
+    //const { clientX, clientY } = event;
+    const rect = event.target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
     if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
@@ -175,8 +178,8 @@ const BoardProvider = ({ children }) => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.DRAW_DOWN,
       payload: {
-        clientX,
-        clientY,
+        clientX: x,
+        clientY: y,
         stroke: toolboxState[boardState.activeToolItem]?.stroke,
         fill: toolboxState[boardState.activeToolItem]?.fill,
         size: toolboxState[boardState.activeToolItem]?.size,
@@ -186,21 +189,25 @@ const BoardProvider = ({ children }) => {
 
   const boardMouseMoveHandler = (event) => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
-    const { clientX, clientY } = event;
+    //const { clientX, clientY } = event;
+    const rect = event.target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
     if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.DRAW_MOVE,
         payload: {
-          clientX,
-          clientY,
+          clientX: x,
+          clientY: y,
         },
       });
     } else if (boardState.toolActionType === TOOL_ACTION_TYPES.ERASING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.ERASE,
         payload: {
-          clientX,
-          clientY,
+          clientX: x,
+          clientY:y,
         },
       });
     }
@@ -221,7 +228,7 @@ const BoardProvider = ({ children }) => {
     });
   };
 
-  const textAreaBlurHandler = (text, toolboxState) => {
+  const textAreaBlurHandler = (text) => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_TEXT,
       payload: {
